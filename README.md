@@ -19,7 +19,7 @@ et peut etre dans le futur pour les series et les films. :heart:
 
 # DB
 
-- SQLITE 
+- SQLITE
 
 # API
 

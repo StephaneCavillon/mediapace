@@ -344,7 +344,7 @@ const AppContext = createContext()
 export const AppProvider = ({ children }) => {
   const [books, setBooks] = useState([])
   const [games, setGames] = useState([])
-  
+
   return (
     <AppContext.Provider value={{ books, games, setBooks, setGames }}>
       {children}
@@ -403,9 +403,9 @@ useEffect(() => {
 ```jsx
 const [title, setTitle] = useState('')
 
-<input 
-  value={title} 
-  onChange={(e) => setTitle(e.target.value)} 
+<input
+  value={title}
+  onChange={(e) => setTitle(e.target.value)}
 />
 ```
 

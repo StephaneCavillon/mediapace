@@ -1,34 +1,37 @@
-from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
 
 class BookBase(BaseModel):
   title: str
-  author: Optional[str] = None
-  pages: Optional[int] = None
-  isbn: Optional[str] = None
-  google_books_id: Optional[str] = None
-  cover_url: Optional[str] = None
+  author: str | None = None
+  pages: int | None = None
+  isbn: str | None = None
+  google_books_id: str | None = None
+  cover_url: str | None = None
+
 
 class BookCreate(BookBase):
   pass
 
+
 class BookUpdate(BaseModel):
-  title: Optional[str] = None
-  author: Optional[str] = None
-  pages: Optional[int] = None
-  current_page: Optional[int] = None
-  isbn: Optional[str] = None
-  cover_url: Optional[str] = None
-  ended_at: Optional[datetime] = None
+  title: str | None = None
+  author: str | None = None
+  pages: int | None = None
+  current_page: int | None = None
+  isbn: str | None = None
+  cover_url: str | None = None
+  ended_at: datetime | None = None
+
 
 class BookResponse(BookBase):
   id: int
-  current_page: Optional[int] = None
+  current_page: int | None = None
   type: str
   created_at: datetime
   updated_at: datetime
-  ended_at: Optional[datetime] = None
+  ended_at: datetime | None = None
 
-  class Config:
-    from_attributes = True
+  model_config = ConfigDict(from_attributes=True, extra='ignore')

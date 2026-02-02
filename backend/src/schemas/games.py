@@ -1,31 +1,34 @@
-from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
 
 class GameBase(BaseModel):
   title: str
-  platform: Optional[str] = None
-  completion_time: Optional[float] = None
-  time_played: Optional[float] = None
-  cover_url: Optional[str] = None
+  platform: str | None = None
+  completion_time: float | None = None
+  time_played: float | None = None
+  cover_url: str | None = None
+
 
 class GameCreate(GameBase):
   pass
 
-class GameUpdate(Basemodel):
-  title = Optional[str] = None
-  platform = Optional[str] = None
-  completion_time = Optional[float] = None
-  time_played = Optional[float]
-  cover_url = Optional[str] = None
-  ended_at = Optional[datetime]
+
+class GameUpdate(BaseModel):
+  title: str | None = None
+  platform: str | None = None
+  completion_time: float | None = None
+  time_played: float | None = None
+  cover_url: str | None = None
+  ended_at: datetime | None = None
+
 
 class GameResponse(GameBase):
   id: int
-  time_played: Optional[float] = None
+  time_played: float | None = None
   created_at: datetime
-  updated_at: Optional[datetime] = None
-  ended_at: Optional[datetime] = None
+  updated_at: datetime | None = None
+  ended_at: datetime | None = None
 
-  class Config:
-    from_attributes = True
+  model_config = ConfigDict(from_attributes=True, extra='ignore')
