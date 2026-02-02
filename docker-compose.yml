@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app # on attribu le dossier backend au container sous le nom app
+    environment:
+      - DATABASE_URL=sqlite:///app/data/app.db # on lui dit que la db est dans le dossier data de l'app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000 # on lui dit que l'api est sur localhost:8000 dans le reseau local docker
+    depends_on:
+      - backend

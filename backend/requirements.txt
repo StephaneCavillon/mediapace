@@ -1,0 +1,6 @@
+fastapi[standard-no-fastapi-cloud-cli]
+uvicorn # ASGI server (( Asynchronous Server Gateway Interface )
+peewee # ORM # voir plus tard si besoin de migration vers sqlalchemy (+complet)
+pydantic-settings # gestion des variables d'environnement, de la configuration de l'app
+howlongtobeatpy # pour recuperer les infos de jeu sur how long to beat
+httpx # pour faire des requetes http
