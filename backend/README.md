@@ -4,11 +4,24 @@ API REST en Python/FastAPI pour gérer vos lectures et jeux vidéo.
 
 ## Tech Stack
 
+### Core
 - **Python 3.12**
 - **FastAPI** - Framework web moderne
+- **Uvicorn** - Serveur ASGI
 - **Peewee** - ORM pour SQLite
-- **Pydantic** - Validation des données
+- **Pydantic Settings** - Gestion de la configuration
 - **SQLite** - Base de données
+
+### APIs externes
+- **HowLongToBeatPy** - Récupération des infos de jeux
+- **HTTPX** - Client HTTP asynchrone
+
+### Développement & Tests
+- **Pytest** - Framework de test
+- **Pre-commit** - Git hooks manager
+- **Ruff** - Linter et formatter
+- **Mypy** - Type checker
+
 
 ---
 
@@ -284,14 +297,21 @@ docker-compose up --build
 
 ## Dépendances
 
-Voir `requirements.txt` pour la liste complète. Principales dépendances :
+Voir `requirements.txt` pour la liste complète.
 
+### Production
 - `fastapi[standard-no-fastapi-cloud-cli]` - Framework web
 - `uvicorn` - Serveur ASGI
 - `peewee` - ORM
-- `pydantic-settings` - Configuration
-- `httpx` - Client HTTP
+- `pydantic-settings` - Gestion des variables d'environnement
+- `httpx` - Client HTTP pour requêtes externes
 - `howlongtobeatpy` - API HowLongToBeat
+
+### Développement
+- `pytest` - Framework de test
+- `pre-commit` - Git hooks manager
+- `ruff` - Linter et formatter Python
+- `mypy` - Type checker statique
 
 ---
 

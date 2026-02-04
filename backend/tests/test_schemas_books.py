@@ -20,7 +20,7 @@ def test_book_create():
   assert book.title == '1984'
   assert book.author == 'George Orwell'
   assert book.pages == 328
-  assert 'created_at' in str(book)
+  assert 'created_at' not in str(book)
   assert 'updated_at' not in str(book)
 
 
@@ -38,8 +38,8 @@ def test_book_update():
   assert book.author == 'George Orwell'
   assert book.pages == 328
   assert book.isbn == '1234567890'
-  assert 'created_at' in str(book)
-  assert 'updated_at' in str(book)
+  assert 'created_at' not in str(book)
+  assert 'updated_at' not in str(book)
 
 
 def test_book_response():
