@@ -137,16 +137,19 @@ Même logique que books :
 
 #### 4.1 Main App (`src/main.py`)
 Créer l'application FastAPI :
-1. Importer FastAPI, CORSMiddleware
+1. Importer FastAPI
 2. Créer instance `app = FastAPI(title="MediaPace API")`
-3. Ajouter CORS middleware (allow origin localhost:3000)
-4. Créer les tables : `db.create_tables([Book, Game])`
-5. Inclure les routers : `app.include_router(books.router, prefix="/api/books")`
-6. Route root : `@app.get("/")` qui retourne un message de bienvenue
-7. Point d'entrée : `if __name__ == "__main__": uvicorn.run()`
+3. Créer les tables : `db.create_tables([Book, Game])`
+4. Inclure les routers : `app.include_router(books.router, prefix="/api/books")`
+5. Route root : `@app.get("/")` qui retourne un message de bienvenue
+6. Point d'entrée : `if __name__ == "__main__": uvicorn.run(app, host="0.0.0.0", port=8000)`
+   - Ce bloc permet de lancer l'API directement avec `python src/main.py`
+   - `host="0.0.0.0"` expose l'API sur toutes les interfaces réseau (nécessaire pour Docker)
+   - `port=8000` définit le port d'écoute
+   - En production Docker, uvicorn est généralement lancé via la commande dans le Dockerfile
 
 **Concepts clés :**
-- CORS permet au frontend React d'appeler l'API
+- Pas besoin de CORS en Docker : les services communiquent via le réseau Docker interne
 - `prefix` ajoute un préfixe à toutes les routes du router
 - `tags` organise la documentation Swagger
 

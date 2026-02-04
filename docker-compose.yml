@@ -1,25 +1,45 @@
 version: '3.8'
 services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - mediapace-network
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     volumes:
       - ./backend:/app # on attribu le dossier backend au container sous le nom app
     environment:
       - DATABASE_URL=sqlite:///app/data/app.db # on lui dit que la db est dans le dossier data de l'app
+    networks:
+      - mediapace-network
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./frontend:/app
     environment:
-      - REACT_APP_API_URL=http://localhost:8000 # on lui dit que l'api est sur localhost:8000 dans le reseau local docker
+      - REACT_APP_API_URL=/api # chemin relatif, nginx redirige /api vers backend:8000
     depends_on:
       - backend
+    networks:
+      - mediapace-network
+
+networks:
+  mediapace-network:
+    driver: bridge
