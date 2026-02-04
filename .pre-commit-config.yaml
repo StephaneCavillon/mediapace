@@ -4,7 +4,9 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
+        files: ^backend/
       - id: ruff-format
+        files: ^backend/
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -24,3 +26,13 @@ repos:
       - id: mypy
         additional_dependencies: [pydantic, pydantic-settings]
         args: [--ignore-missing-imports, --explicit-package-bases]
+        files: ^backend/
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: bash -c 'cd backend && source venv/bin/activate && pytest'
+        language: system
+        pass_filenames: false
+        files: ^backend/.*\.py$
