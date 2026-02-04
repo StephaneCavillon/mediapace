@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 class GameBase(BaseModel):
   title: str
+  user_id: str
   platform: str | None = None
   completion_time: float | None = None
   time_played: float | None = None
@@ -26,6 +27,7 @@ class GameUpdate(BaseModel):
 
 class GameResponse(GameBase):
   id: int
+  user_id: str
   time_played: float | None = None
   created_at: datetime
   updated_at: datetime | None = None

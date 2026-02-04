@@ -1,12 +1,16 @@
 from datetime import datetime
 
-from peewee import AutoField, CharField, DateTimeField, IntegerField
+from peewee import AutoField, CharField, DateTimeField, ForeignKeyField, IntegerField
 
 from src.database import BaseModel
+from src.models.users import User
 
 
 class Book(BaseModel):
   id = AutoField()
+  user = ForeignKeyField(
+    User, backref='books', null=False
+  )  # relation avec l'utilisateur
   isbn = CharField(unique=True, null=True)
   google_books_id = CharField(
     unique=True, null=True

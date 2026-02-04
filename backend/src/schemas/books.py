@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 class BookBase(BaseModel):
   title: str
+  user_id: str
   author: str | None = None
   pages: int | None = None
   isbn: str | None = None
@@ -28,6 +29,7 @@ class BookUpdate(BaseModel):
 
 class BookResponse(BookBase):
   id: int
+  user_id: str
   current_page: int | None = None
   type: str
   created_at: datetime
