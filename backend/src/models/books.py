@@ -16,7 +16,13 @@ class Book(BaseModel):
   pages = IntegerField(null=True)
   current_page = IntegerField(default=0)
   cover_url = CharField(null=True)
-  created_at = DateTimeField(null=True, default=datetime.now)
-  updated_at = DateTimeField(null=False, default=datetime.now)
+  created_at = DateTimeField(null=False, default=datetime.now)
+  updated_at = DateTimeField(null=True)
   type = CharField(null=False, default='book')
   ended_at = DateTimeField(null=True)
+
+  def save(self, *args, **kwargs):
+    # Mettre à jour updated_at à chaque sauvegarde
+    if self.id is not None:  # Si c'est une mise à jour (pas une création)
+      self.updated_at = datetime.now()
+    return super().save(*args, **kwargs)
