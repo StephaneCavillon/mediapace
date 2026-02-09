@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 
 from peewee import CharField, DateTimeField, UUIDField
 
@@ -6,9 +7,10 @@ from src.database import BaseModel
 
 
 class User(BaseModel):
-  id = UUIDField(primary_key=True)
+  id = UUIDField(primary_key=True, default=uuid4)
   username = CharField(unique=True, null=False)
   email = CharField(unique=True, null=False)
+  role = CharField(null=False, default='user')
   password = CharField(null=False)
   avatar_url = CharField(null=True)
   created_at = DateTimeField(null=False, default=datetime.now)

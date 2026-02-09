@@ -7,7 +7,7 @@ from src.schemas.books import BookBase, BookCreate, BookResponse, BookUpdate
 
 
 def test_book_base():
-  book = BookBase(title='1984', author='George Orwell', pages=328, user_id='1')
+  book = BookBase(title='1984', author='George Orwell', pages=328, user='1')
 
   assert book.title == '1984'
   assert book.author == 'George Orwell'
@@ -15,7 +15,7 @@ def test_book_base():
 
 
 def test_book_create():
-  book = BookCreate(title='1984', author='George Orwell', pages=328, user_id='1')
+  book = BookCreate(title='1984', author='George Orwell', pages=328, user='1')
 
   assert book.title == '1984'
   assert book.author == 'George Orwell'
@@ -45,7 +45,7 @@ def test_book_update():
 def test_book_response():
   book = BookResponse(
     id=1,
-    user_id='1',
+    user='1',
     title='1984',
     author='George Orwell',
     pages=328,
@@ -60,7 +60,7 @@ def test_book_response():
   assert book.title == '1984'
   assert book.author == 'George Orwell'
   assert book.pages == 328
-  assert book.user_id == '1'
+  assert book.user == '1'
   assert 'created_at' in str(book)
   assert 'updated_at' in str(book)
   assert 'ended_at' in str(book)

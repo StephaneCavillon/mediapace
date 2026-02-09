@@ -1,4 +1,4 @@
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, FastAPI, Request
 
 from src.database import db
 from src.models import Book, Game, User
@@ -23,9 +23,16 @@ def login():
   return {'message': 'Login'}
 
 
+@app.add_middleware()
+def get_user_role(request: Request, call_next):
+  user = User.get(User.id == request.user)
+  request.user.role = user.role
+  return call_next(request)
+
+
 # Dashboard
 @app.get('/dashboard')
-def dashboard():
+def dashboard(request: Request):
   # @todo: implement dashboard
   return {'message': 'Welcome to the dashboard'}
 

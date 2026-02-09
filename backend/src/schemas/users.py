@@ -8,6 +8,7 @@ class UserBase(BaseModel):
   email: str
   password: str
   avatar_url: str | None = None
+  role: str = 'user'
 
 
 class UserCreate(UserBase):
@@ -20,6 +21,7 @@ class UserUpdate(UserBase):
 
 class UserResponse(UserBase):
   id: str
+  username: str
   created_at: datetime
   updated_at: datetime
 
