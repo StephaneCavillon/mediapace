@@ -5,6 +5,7 @@ pydantic-settings # gestion des variables d'environnement, de la configuration d
 howlongtobeatpy # pour recuperer les infos de jeu sur how long to beat
 httpx # pour faire des requetes http
 pytest # framework de test
+pytest-cov # test coverage
 pre-commit # git hooks manager
 ruff # linter et formatter
 mypy # type checker

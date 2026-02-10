@@ -7,7 +7,7 @@ from src.schemas.games import GameCreate, GameUpdate
 class GamesService:
   # list all Games for a user
   def list(self, user: str):
-    return Game.get(Game.user == user)
+    return Game.select().where(Game.user == user).order_by(Game.title)
 
   # list all Games for admin
   def list_all(self):
@@ -20,13 +20,18 @@ class GamesService:
     return Game.create(**data.model_dump())
 
   def update(self, game_id: int, data: GameUpdate):
-    row_updated = Game.update(**data.model_dump()).where(Game.id == game_id).execute()
+    q = Game.update(**data.model_dump(exclude_unset=True)).where(Game.id == game_id)
+    row_updated = q.execute()
     if row_updated == 0:
       raise HTTPException(status_code=404, detail='Game not found')
     return Game.get_by_id(game_id)
 
   def delete(self, game_id: int):
-    row_deleted = Game.delete().where(Game.id == game_id).execute()
+    q = Game.delete().where(Game.id == game_id)
+    row_deleted = q.execute()
     if row_deleted == 0:
       raise HTTPException(status_code=404, detail='Game not found')
-    return Game.get_by_id(game_id)
+    return row_deleted
+
+
+games_service = GamesService()

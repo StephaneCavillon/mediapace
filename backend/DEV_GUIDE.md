@@ -344,6 +344,34 @@ docker-compose exec backend bash
 sqlite3 data/app.db
 ```
 
+### Tests et couverture de code
+```bash
+# Lancer tous les tests
+pytest tests/
+
+# Lancer les tests avec couverture
+pytest --cov=src tests/
+
+# Rapport détaillé avec lignes manquantes
+pytest --cov=src --cov-report=term-missing tests/
+
+# Générer un rapport HTML interactif
+pytest --cov=src --cov-report=html tests/
+# Ouvrir htmlcov/index.html dans le navigateur
+
+# Lancer un fichier de test spécifique
+pytest tests/test_service_book.py
+
+# Lancer un test spécifique
+pytest tests/test_service_book.py::test_book_creation
+
+# Mode verbose pour plus de détails
+pytest -v tests/
+
+# Afficher les print() dans les tests
+pytest -s tests/
+```
+
 ---
 
 ## Ressources
@@ -357,11 +385,11 @@ sqlite3 data/app.db
 
 ## Checklist de progression
 
-- [ ] Phase 1 : Configuration (config.py, database.py)
-- [ ] Phase 2 : Modèles (books.py, games.py)
-- [ ] Phase 3 : Schémas (schemas/books.py, schemas/games.py)
-- [ ] Phase 4 : API (main.py, routers)
-- [ ] Phase 5 : Services (books_service.py, games_service.py)
+- [x] Phase 1 : Configuration (config.py, database.py)
+- [x] Phase 2 : Modèles (books.py, games.py)
+- [x] Phase 3 : Schémas (schemas/books.py, schemas/games.py)
+- [x] Phase 4 : API (main.py, routers)
+- [x] Phase 5 : Services (books_service.py, games_service.py)
 - [ ] Phase 6 : APIs externes (google_books.py, howlongtobeat.py)
 - [ ] Tests : Tester tous les endpoints avec curl ou Swagger
 - [ ] Frontend : Connecter React à l'API
