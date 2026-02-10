@@ -25,7 +25,9 @@ def test_book_update(context):
   )
   book = books_service.create(book_data)
 
-  updated_book = books_service.update(book.id, BookUpdate(pages=330))
+  updated_book = books_service.update(
+    book.id, context['test_user'], BookUpdate(pages=330)
+  )
 
   assert updated_book.title == '1984'
   assert updated_book.author == 'George Orwell'
@@ -39,7 +41,7 @@ def test_book_delete(context):
   )
   book = books_service.create(book_data)
 
-  deleted_book = books_service.delete(book.id)
+  deleted_book = books_service.delete(book.id, context['test_user'])
 
   assert deleted_book == 1
   assert len(Book.select()) == 0
@@ -51,7 +53,7 @@ def test_book_get(context):
   )
   book = books_service.create(book_data)
 
-  gotten_book = books_service.get(book.id)
+  gotten_book = books_service.get(book.id, context['test_user'])
 
   assert gotten_book.title == '1984'
   assert gotten_book.author == 'George Orwell'
@@ -97,17 +99,17 @@ def test_user_book_list(context):
   assert listed_books[1].user.id == context['test_user'].id
 
 
-def test_fail_update():
+def test_fail_update(context):
   try:
-    books_service.update(999, BookUpdate(pages=330))
+    books_service.update(999, context['test_user'], BookUpdate(pages=330))
   except HTTPException as e:
     assert e.status_code == 404
     assert e.detail == 'Book not found'
 
 
-def test_fail_delete():
+def test_fail_delete(context):
   try:
-    books_service.delete(999)
+    books_service.delete(999, context['test_user'])
   except HTTPException as e:
     assert e.status_code == 404
     assert e.detail == 'Book not found'

@@ -5,12 +5,6 @@ from src.schemas.users import UserCreate, UserResponse, UserUpdate
 router = APIRouter(prefix='/users', tags=['users'])
 
 
-@router.get('/me', response_model=UserResponse)
-def get_me():
-  # @todo: implement get me
-  return {'message': 'Me'}
-
-
 @router.post('/', response_model=UserResponse)
 def create_user(user: UserCreate):
   # @todo: implement create user
@@ -21,6 +15,12 @@ def create_user(user: UserCreate):
 def update_user(user_id: str, user: UserUpdate):
   # @todo: implement update user
   return {'message': f'User {user_id}'}
+
+
+@router.get('/', response_model=list[UserResponse])
+def list_users():
+  # @todo: implement list users for admin only
+  return {'message': 'List of users'}
 
 
 @router.get('/{user_id}', response_model=UserResponse)

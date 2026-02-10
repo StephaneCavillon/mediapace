@@ -31,7 +31,9 @@ def test_game_update(context):
   )
   game = games_service.create(game_data)
 
-  updated_game = games_service.update(game.id, GameUpdate(time_played=25.0))
+  updated_game = games_service.update(
+    game.id, context['test_user'], GameUpdate(time_played=25.0)
+  )
 
   assert updated_game.title == 'The Legend of Zelda'
   assert updated_game.platform == 'Nintendo Switch'
@@ -48,7 +50,7 @@ def test_game_delete(context):
   )
   game = games_service.create(game_data)
 
-  deleted_game = games_service.delete(game.id)
+  deleted_game = games_service.delete(game.id, context['test_user'])
 
   assert deleted_game == 1
   assert len(Game.select()) == 0
@@ -63,7 +65,7 @@ def test_game_get(context):
   )
   game = games_service.create(game_data)
 
-  gotten_game = games_service.get(game.id)
+  gotten_game = games_service.get(game.id, context['test_user'])
 
   assert gotten_game.title == 'The Legend of Zelda'
   assert gotten_game.platform == 'Nintendo Switch'
@@ -112,17 +114,17 @@ def test_user_game_list(context):
   assert listed_games[1].user.id == context['test_user'].id
 
 
-def test_fail_update():
+def test_fail_update(context):
   try:
-    games_service.update(999, GameUpdate(time_played=25.0))
+    games_service.update(999, context['test_user'], GameUpdate(time_played=25.0))
   except HTTPException as e:
     assert e.status_code == 404
     assert e.detail == 'Game not found'
 
 
-def test_fail_delete():
+def test_fail_delete(context):
   try:
-    games_service.delete(999)
+    games_service.delete(999, context['test_user'])
   except HTTPException as e:
     assert e.status_code == 404
     assert e.detail == 'Game not found'

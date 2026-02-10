@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from src.models import Book
+from src.models import Book, User
 from src.schemas import BookCreate, BookUpdate
 
 
@@ -13,21 +13,23 @@ class BooksService:
   def list_all(self):
     return Book.select()
 
-  def get(self, book_id: int):
-    return Book.get_by_id(book_id)
+  def get(self, book_id: int, user: User):
+    return Book.get(Book.id == book_id, Book.user == user.id)
 
   def create(self, data: BookCreate):
     return Book.create(**data.model_dump())
 
-  def update(self, book_id: int, data: BookUpdate):
-    q = Book.update(**data.model_dump(exclude_unset=True)).where(Book.id == book_id)
+  def update(self, book_id: int, user: User, data: BookUpdate):
+    q = Book.update(**data.model_dump(exclude_unset=True)).where(
+      Book.id == book_id, Book.user == user.id
+    )
     row_updated = q.execute()
     if row_updated == 0:
       raise HTTPException(status_code=404, detail='Book not found')
     return Book.get_by_id(book_id)
 
-  def delete(self, book_id: int):
-    q = Book.delete().where(Book.id == book_id)
+  def delete(self, book_id: int, user: User):
+    q = Book.delete().where(Book.id == book_id, Book.user == user.id)
     row_deleted = q.execute()
     if row_deleted == 0:
       raise HTTPException(status_code=404, detail='Book not found')

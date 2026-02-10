@@ -1,8 +1,10 @@
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import APIRouter, FastAPI, HTTPException, Request
 
+from src.auth.security import create_access_token, verify_password
 from src.database import db
 from src.models import Book, Game, User
 from src.routers import books, games, users
+from src.schemas.auth import LoginRequest, TokenResponse
 
 app = FastAPI(
   title='Mediapace API', description='Mediapace API', version='0.0.1', debug=True
@@ -18,16 +20,18 @@ def health():
 
 
 # Login
-@app.get('/login')
-def login():
-  return {'message': 'Login'}
+@app.post('/login', response_model=TokenResponse)
+def login(credentials: LoginRequest):
+  try:
+    user = User.get(User.email == credentials.email)
+  except User.DoesNotExist:
+    raise HTTPException(status_code=401, detail='Invalid credentials') from None
 
+  if not verify_password(credentials.password, user.password):
+    raise HTTPException(status_code=401, detail='Invalid credentials')
 
-@app.add_middleware()
-def get_user_role(request: Request, call_next):
-  user = User.get(User.id == request.user)
-  request.user.role = user.role
-  return call_next(request)
+  token = create_access_token({'sub': user.id})
+  return {'access_token': token, 'token_type': 'bearer'}
 
 
 # Dashboard

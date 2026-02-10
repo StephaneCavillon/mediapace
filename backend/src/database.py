@@ -1,8 +1,10 @@
 from peewee import Model
 from playhouse.sqlite_ext import SqliteExtDatabase
 
+from src.config import settings
+
 db = SqliteExtDatabase(
-  'data/db.sqlite',
+  settings.database_url,
   pragmas={
     'journal_mode': 'wal',
     'cache_size': -1024 * 64,
