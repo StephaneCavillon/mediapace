@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import APIRouter, FastAPI, HTTPException, Request
 
 from src.auth.security import create_access_token, verify_password
@@ -6,11 +8,23 @@ from src.models import Book, Game, User
 from src.routers import books, games, users
 from src.schemas.auth import LoginRequest, TokenResponse
 
-app = FastAPI(
-  title='Mediapace API', description='Mediapace API', version='0.0.1', debug=True
-)
 
-db.create_tables([User, Book, Game])
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+  # Startup: create tables
+  db.create_tables([User, Book, Game])
+  yield
+  # Shutdown: close database
+  db.close()
+
+
+app = FastAPI(
+  title='Mediapace API',
+  description='Mediapace API',
+  version='0.0.1',
+  debug=True,
+  lifespan=lifespan,
+)
 
 
 # Route

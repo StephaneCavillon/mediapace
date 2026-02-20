@@ -9,7 +9,7 @@ def test_book_creation(context):
   book_data = BookCreate(
     title='1984', author='George Orwell', pages=328, user=str(context['test_user'].id)
   )
-  book = books_service.create(book_data)
+  book = books_service.create(book_data, context['test_user'].id)
 
   created_book = len(Book.select())
   assert created_book == 1
@@ -23,7 +23,7 @@ def test_book_update(context):
   book_data = BookCreate(
     title='1984', author='George Orwell', pages=328, user=str(context['test_user'].id)
   )
-  book = books_service.create(book_data)
+  book = books_service.create(book_data, context['test_user'].id)
 
   updated_book = books_service.update(
     book.id, context['test_user'], BookUpdate(pages=330)
@@ -39,7 +39,7 @@ def test_book_delete(context):
   book_data = BookCreate(
     title='1984', author='George Orwell', pages=328, user=str(context['test_user'].id)
   )
-  book = books_service.create(book_data)
+  book = books_service.create(book_data, str(context['test_user'].id))
 
   deleted_book = books_service.delete(book.id, context['test_user'])
 
@@ -51,7 +51,7 @@ def test_book_get(context):
   book_data = BookCreate(
     title='1984', author='George Orwell', pages=328, user=str(context['test_user'].id)
   )
-  book = books_service.create(book_data)
+  book = books_service.create(book_data, context['test_user'].id)
 
   gotten_book = books_service.get(book.id, context['test_user'])
 
@@ -84,7 +84,7 @@ def test_user_book_list(context):
   ]
 
   for book in book_data:
-    books_service.create(book)
+    books_service.create(book, book.user)
 
   listed_books = books_service.list(str(context['test_user'].id))
 

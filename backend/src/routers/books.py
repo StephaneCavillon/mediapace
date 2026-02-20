@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src.auth.dependencies import get_current_admin, get_current_user
 from src.models import User
-from src.schemas.books import BookCreate, BookResponse, BookUpdate
+from src.schemas.books import BookBase, BookResponse, BookUpdate
 from src.services.books_service import books_service
 
 router = APIRouter(prefix='/books', tags=['books'])
@@ -30,8 +30,8 @@ def get_all_books(book_id: int, current_user: User = Depends(get_current_admin))
 
 
 @router.post('/', response_model=BookResponse)
-def create_book(book: BookCreate, current_user: User = Depends(get_current_user)):
-  return books_service.create(book)
+def create_book(book: BookBase, current_user: User = Depends(get_current_user)):
+  return books_service.create(book, user=str(current_user.id))
 
 
 @router.patch('/{book_id}', response_model=BookResponse)
@@ -44,7 +44,7 @@ def update_book(
   return updated
 
 
-@router.delete('/{book_id}', response_model=BookResponse)
+@router.delete('/{book_id}')
 def delete_book(book_id: int, current_user: User = Depends(get_current_user)):
   deleted = books_service.delete(book_id, current_user)
   if not deleted:

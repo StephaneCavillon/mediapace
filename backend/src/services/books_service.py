@@ -14,10 +14,15 @@ class BooksService:
     return Book.select()
 
   def get(self, book_id: int, user: User):
-    return Book.get(Book.id == book_id, Book.user == user.id)
+    try:
+      return Book.get(Book.id == book_id, Book.user == user.id)
+    except Book.DoesNotExist:
+      raise HTTPException(status_code=404, detail='Book not found') from None
 
-  def create(self, data: BookCreate):
-    return Book.create(**data.model_dump())
+  def create(self, data: BookCreate, user: str):
+    book = data.model_dump()
+    book['user'] = user
+    return Book.create(**book)
 
   def update(self, book_id: int, user: User, data: BookUpdate):
     q = Book.update(**data.model_dump(exclude_unset=True)).where(

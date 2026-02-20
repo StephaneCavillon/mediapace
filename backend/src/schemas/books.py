@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
 
 
 class BookBase(BaseModel):
   title: str
-  user: str
   author: str | None = None
   pages: int | None = None
   isbn: str | None = None
@@ -14,7 +13,7 @@ class BookBase(BaseModel):
 
 
 class BookCreate(BookBase):
-  pass
+  user: str
 
 
 class BookUpdate(BaseModel):
@@ -29,11 +28,17 @@ class BookUpdate(BaseModel):
 
 class BookResponse(BookBase):
   id: int
-  user: str
+  user: str | object
   current_page: int | None = None
   type: str
   created_at: datetime
-  updated_at: datetime
+  updated_at: datetime | None = None
   ended_at: datetime | None = None
 
   model_config = ConfigDict(from_attributes=True, extra='ignore')
+
+  @field_serializer('user')
+  def serialize_user(self, user):
+    if hasattr(user, 'id'):
+      return str(user.id)
+    return str(user)
