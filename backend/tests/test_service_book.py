@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from src.models import Book, User
+from src.models import Book
 from src.schemas import BookCreate, BookUpdate
 from src.services.books_service import books_service
 
@@ -61,41 +61,17 @@ def test_book_get(context):
   assert gotten_book.user.id == context['test_user'].id
 
 
-def test_user_book_list(context):
-  test_user_2 = User.create(
-    username='test2', email='test2@test.com', password='test2', role='user'
-  )
-  book_data = [
-    BookCreate(
-      title='1984', author='George Orwell', pages=328, user=str(context['test_user'].id)
-    ),
-    BookCreate(
-      title='Animal Farm',
-      author='George Orwell',
-      pages=112,
-      user=str(context['test_user'].id),
-    ),
-    BookCreate(
-      title='The Great Gatsby',
-      author='F. Scott Fitzgerald',
-      pages=180,
-      user=str(test_user_2.id),
-    ),
-  ]
-
-  for book in book_data:
-    books_service.create(book, book.user)
-
+def test_user_book_list(context, seed_books):
   listed_books = books_service.list(str(context['test_user'].id))
 
-  assert len(listed_books) == 2
-  assert listed_books[0].title == '1984'
-  assert listed_books[0].author == 'George Orwell'
-  assert listed_books[0].pages == 328
+  assert len(listed_books) == 3
+  assert listed_books[0].title == 'Test Book 1'
+  assert listed_books[0].author == 'Test Author 1'
+  assert listed_books[0].pages == 100
   assert listed_books[0].user.id == context['test_user'].id
-  assert listed_books[1].title == 'Animal Farm'
-  assert listed_books[1].author == 'George Orwell'
-  assert listed_books[1].pages == 112
+  assert listed_books[1].title == 'Test Book 2'
+  assert listed_books[1].author == 'Test Author 2'
+  assert listed_books[1].pages == 200
   assert listed_books[1].user.id == context['test_user'].id
 
 

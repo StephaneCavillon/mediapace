@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
 
 
 class GameBase(BaseModel):
@@ -13,7 +13,7 @@ class GameBase(BaseModel):
 
 
 class GameCreate(GameBase):
-  pass
+  user: str
 
 
 class GameUpdate(BaseModel):
@@ -27,10 +27,16 @@ class GameUpdate(BaseModel):
 
 class GameResponse(GameBase):
   id: int
-  user: str
-  time_played: float | None = None
+  user: str | object  # type: ignore[assignment]
+  type: str
   created_at: datetime
   updated_at: datetime | None = None
   ended_at: datetime | None = None
 
   model_config = ConfigDict(from_attributes=True, extra='ignore')
+
+  @field_serializer('user')
+  def serialize_user(self, user):
+    if hasattr(user, 'id'):
+      return str(user.id)
+    return str(user)

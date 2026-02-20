@@ -14,10 +14,18 @@ class GamesService:
     return Game.select()
 
   def get(self, game_id: int, user: User):
-    return Game.get(Game.id == game_id, Game.user == user.id)
+    try:
+      if user.role == 'admin':
+        return Game.get_by_id(game_id)
+      else:
+        return Game.get(Game.id == game_id, Game.user == user.id)
+    except Game.DoesNotExist:
+      raise HTTPException(status_code=404, detail='Game not found') from None
 
-  def create(self, data: GameCreate):
-    return Game.create(**data.model_dump())
+  def create(self, data: GameCreate, user: str):
+    game = data.model_dump()
+    game['user'] = user
+    return Game.create(**game)
 
   def update(self, game_id: int, user: User, data: GameUpdate):
     q = Game.update(**data.model_dump(exclude_unset=True)).where(

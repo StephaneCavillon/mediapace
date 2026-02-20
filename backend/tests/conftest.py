@@ -92,3 +92,45 @@ def seed_books(context):
     ),
   ]
   return books
+
+
+@pytest.fixture
+def seed_games(context):
+  games = [
+    Game.create(
+      title='Test Game 1',
+      platform='PC',
+      completion_time=10.5,
+      time_played=5.0,
+      user=context['test_user'].id,
+    ),
+    Game.create(
+      title='Test Game 2',
+      platform='PS5',
+      completion_time=20.0,
+      time_played=15.0,
+      user=context['test_user'].id,
+    ),
+    Game.create(
+      title='Test Game 3',
+      platform='Xbox',
+      completion_time=30.0,
+      time_played=25.0,
+      user=context['test_user'].id,
+    ),
+    Game.create(
+      title='Test Game 4',
+      platform='Switch',
+      completion_time=40.0,
+      time_played=35.0,
+      user=context['test_admin'].id,
+    ),
+    Game.create(
+      title='Test Game 5',
+      platform='PC',
+      completion_time=50.0,
+      time_played=45.0,
+      user=context['test_admin'].id,
+    ),
+  ]
+  return games

@@ -15,9 +15,7 @@ def list_user_games(current_user: User = Depends(get_current_user)):
 
 @router.get('/{game_id}', response_model=GameResponse)
 def get_games(game_id: int, current_user: User = Depends(get_current_user)):
-  game = games_service.get(game_id)
-  if current_user.role != 'admin' and game.user.id != current_user.id:
-    raise HTTPException(status_code=403, detail='Forbidden')
+  game = games_service.get(game_id, current_user)
   return game
 
 
@@ -28,12 +26,12 @@ def list_all_games(current_user: User = Depends(get_current_admin)):
 
 @router.get('/admin/{game_id}', response_model=GameResponse)
 def get_all_games(game_id: int, current_user: User = Depends(get_current_admin)):
-  return games_service.get(game_id)
+  return games_service.get(game_id, current_user)
 
 
 @router.post('/', response_model=GameResponse)
 def create_game(game: GameCreate, current_user: User = Depends(get_current_user)):
-  return games_service.create(game)
+  return games_service.create(game, user=str(current_user.id))
 
 
 @router.patch('/{game_id}', response_model=GameResponse)
@@ -46,7 +44,7 @@ def update_game(
   return updated
 
 
-@router.delete('/{game_id}', response_model=GameResponse)
+@router.delete('/{game_id}')
 def delete_game(game_id: int, current_user: User = Depends(get_current_user)):
   deleted = games_service.delete(game_id, current_user)
   if not deleted:

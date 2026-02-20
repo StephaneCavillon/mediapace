@@ -26,7 +26,7 @@ def list_all_books(current_user: User = Depends(get_current_admin)):
 
 @router.get('/admin/{book_id}', response_model=BookResponse)
 def get_all_books(book_id: int, current_user: User = Depends(get_current_admin)):
-  return books_service.get(book_id)
+  return books_service.get(book_id, current_user)
 
 
 @router.post('/', response_model=BookResponse)

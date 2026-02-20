@@ -15,7 +15,10 @@ class BooksService:
 
   def get(self, book_id: int, user: User):
     try:
-      return Book.get(Book.id == book_id, Book.user == user.id)
+      if user.role == 'admin':
+        return Book.get_by_id(book_id)
+      else:
+        return Book.get(Book.id == book_id, Book.user == user.id)
     except Book.DoesNotExist:
       raise HTTPException(status_code=404, detail='Book not found') from None
 
